@@ -29,6 +29,6 @@ public class KafkaController {
 	@KafkaListener(topics = "baeldung", groupId = "foo")
 	public void listenGroupFoo(String message) {
 	    this.logService.save(message);
-	    log.info("Message " + message + " saved successfully!");
+	    log.info("Message '" + message + "' saved successfully!");
 	}
 }
