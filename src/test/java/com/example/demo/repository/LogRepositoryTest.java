@@ -14,37 +14,65 @@ import com.example.demo.model.Log;
 
 @DataJpaTest
 public class LogRepositoryTest {
-	
+
 	@Autowired
 	private LogRepository logRepo;
-	
+
 	@AfterEach
 	public void clean() {
 		this.logRepo.deleteAll();
 	}
-	
+
 	@Test
 	void itShouldCheckIfLogsContainString() {
 		// given
 		Log log = new Log(null, "test", new Date());
 		logRepo.save(log);
-		
+
 		// when
 		List<Log> expected = logRepo.findByMessageContaining("es");
-		
+
 		// then
 		assertThat(expected.size() > 0).isTrue();
 	}
-	
+
 	@Test
 	void itShouldCheckIfLogsDoesNotContainString() {
 		// given
 		Log log = new Log(null, "test", new Date());
 		logRepo.save(log);
-		
+
 		// when
 		List<Log> expected = logRepo.findByMessageContaining("hhh");
-		
+
+		// then
+		assertThat(expected.size() > 0).isFalse();
+	}
+
+	@Test
+	void itShouldCheckIfLogsExistsForADate() {
+		// given
+		Date messageDate = new Date();
+		Log log = new Log(null, "test", messageDate);
+		logRepo.save(log);
+
+		// when
+		List<Log> expected = logRepo.findByDate(messageDate);
+
+		// then
+		assertThat(expected.size() > 0).isTrue();
+	}
+
+	@Test
+	void itShouldCheckIfLogsDontExistsForADate() {
+		// given
+		Date messageDate = new Date();
+		Log log = new Log(null, "test", messageDate);
+		logRepo.save(log);
+
+		// when
+		List<Log> expected = logRepo.findByDate(new Date());
+
 		// then
 		assertThat(expected.size() > 0).isFalse();
 	}
