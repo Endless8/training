@@ -4,13 +4,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Log;
 import com.example.demo.repository.LogRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class LogService {
+	
 	@Autowired
 	private LogRepository logRepo;
 	
@@ -19,15 +25,39 @@ public class LogService {
 		this.logRepo.save(log);
 	}
 	
-	public Log retrieveLogById(Long id) {
-		return this.logRepo.findById(id).orElse(null);
+	public ResponseEntity<Log> retrieveLogById(Long id) {
+		Log message = this.logRepo.findById(id).orElse(null);
+		
+		if (message != null) {
+	    	log.info("Message found: " + message);
+	    	return new ResponseEntity<>(message, HttpStatus.OK);
+	    } else {
+	    	log.info("The message doesn't exist.");
+	    	return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+	    }
 	}
 	
-	public List<Log> retrieveLogsByText(String text) {
-		return this.logRepo.findByMessageContaining(text);
+	public ResponseEntity<List<Log>> retrieveLogsByText(String text) {
+		List<Log> messageList = this.logRepo.findByMessageContaining(text);
+		
+		if (!messageList.isEmpty()) {
+	    	log.info("Message(s) found: " + messageList);
+	    	return new ResponseEntity<>(messageList, HttpStatus.OK);
+		} else {
+	    	log.info("There's no message containing: " + text);
+	    	return new ResponseEntity<>(messageList, HttpStatus.NOT_FOUND);
+	    }
 	}
 	
-	public List<Log> retrieveLogsByDate(Date date) {
-		return this.logRepo.findByDate(date);
+	public ResponseEntity<List<Log>> retrieveLogsByDate(Date date) {
+		List<Log> messageList = this.logRepo.findByDate(date);
+		
+		if (!messageList.isEmpty()) {
+	    	log.info("Message(s) found: " + messageList);
+	    	return new ResponseEntity<>(messageList, HttpStatus.OK);
+		} else {
+	    	log.info("There's no message sent on: " + date);
+	    	return new ResponseEntity<>(messageList, HttpStatus.NOT_FOUND);
+	    }
 	}
 }

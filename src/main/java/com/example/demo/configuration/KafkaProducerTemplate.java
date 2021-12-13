@@ -9,6 +9,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Component
 public class KafkaProducerTemplate {
+	
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
