@@ -3,7 +3,6 @@ package com.example.demo.service;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,13 +10,14 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Log;
 import com.example.demo.repository.LogRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class LogService {
 	
-	@Autowired
 	private LogRepository logRepo;
 	
 	public void save(String message) {
